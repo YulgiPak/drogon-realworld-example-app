@@ -1,0 +1,19 @@
+#!/bin/sh
+# pre-push: E2E 테스트
+# E2E 테스트 실패 시 푸시 차단
+# 현재 E2E는 플레이스홀더이므로 항상 통과 (향후 구현 예정)
+
+echo "[pre-push] E2E 테스트 실행 중..."
+
+make e2e
+STATUS=$?
+
+if [ $STATUS -ne 0 ]; then
+    echo ""
+    echo "[pre-push] E2E 테스트 실패 — 푸시가 차단되었습니다."
+    echo "           'make e2e' 를 직접 실행하여 오류를 확인하세요."
+    exit 1
+fi
+
+echo "[pre-push] E2E 테스트 통과 — 푸시를 진행합니다."
+exit 0

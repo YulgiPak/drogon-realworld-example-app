@@ -1,0 +1,39 @@
+#!/bin/sh
+# pre-commit: 린트 체크 + 단위 테스트
+# make check 실패 시 커밋 차단
+
+echo "[pre-commit] 린트 + 단위 테스트 실행 중..."
+
+# make 실행 가능 경로 탐색 (Windows GnuWin32 포함)
+MAKE_CMD=""
+for candidate in make "/c/Program Files (x86)/GnuWin32/bin/make" "/usr/bin/make" "/mingw64/bin/make"; do
+    if command -v "$candidate" >/dev/null 2>&1; then
+        MAKE_CMD="$candidate"
+        break
+    fi
+done
+
+if [ -z "$MAKE_CMD" ]; then
+    echo "[pre-commit] make 명령을 찾을 수 없습니다. 검사를 건너뜁니다."
+    exit 0
+fi
+
+# cmake 등 빌드 도구 미설치 시 경고 후 건너뜀
+if ! command -v cmake >/dev/null 2>&1; then
+    echo "[pre-commit] cmake 미설치 — 빌드 도구 설치 후 'make check'를 실행하세요."
+    echo "[pre-commit] 경고: 검사 없이 커밋을 진행합니다."
+    exit 0
+fi
+
+"$MAKE_CMD" check
+STATUS=$?
+
+if [ $STATUS -ne 0 ]; then
+    echo ""
+    echo "[pre-commit] 검사 실패 — 커밋이 차단되었습니다."
+    echo "             'make check' 를 직접 실행하여 오류를 확인하세요."
+    exit 1
+fi
+
+echo "[pre-commit] 모든 검사 통과 — 커밋을 진행합니다."
+exit 0
