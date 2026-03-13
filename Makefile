@@ -44,7 +44,7 @@ help:
 	@echo "  make lint         - clang-tidy 정적 분석"
 	@echo "  make format       - clang-format 자동 포맷 적용"
 	@echo "  make check        - lint + test (pre-commit hook 용)"
-	@echo "  make e2e          - E2E 테스트 (플레이스홀더)"
+	@echo "  make e2e          - E2E 테스트 (tests/e2e/test_api.sh 실행)"
 	@echo "  make setup-hooks  - Git hooks 설정 (.githooks/ 디렉토리 등록)"
 	@echo "  make clean        - 빌드 산출물 삭제"
 	@echo ""
@@ -125,13 +125,12 @@ format-check:
 check: lint test
 	@echo "[check] 모든 검사 통과"
 
-# ── e2e: E2E 테스트 플레이스홀더 ────────────────────────────────────────────
+# ── e2e: E2E 테스트 ─────────────────────────────────────────────────────────
 
 e2e:
-	@echo "[e2e] E2E 테스트 — 아직 구현되지 않음 (플레이스홀더)"
-	@echo "      향후 Newman(Postman), pytest-requests, 또는 k6 스크립트 추가 예정"
-	@echo "      서버가 localhost:8080 에서 실행 중이어야 합니다"
-	@exit 0
+	@echo "[e2e] E2E 테스트 실행 중..."
+	@bash tests/e2e/test_api.sh
+	@echo "[e2e] 완료"
 
 # ── setup-hooks: Git hooks 디렉토리 등록 ─────────────────────────────────────
 
