@@ -1,0 +1,125 @@
+# .clang-format
+#
+# 기존 코드 스타일 분석 기반 포맷 설정
+# 기준: C++20, 들여쓰기 4칸 스페이스, Allman 중괄호, 120자 라인
+#
+# 분석된 기존 코드 스타일:
+#   - 들여쓰기: 4칸 스페이스 (탭 없음)
+#   - 중괄호: Allman 스타일 (여는 중괄호 새 줄)
+#   - 람다: 본문 들여쓰기 유지
+#   - 포인터/참조: 오른쪽 붙임 (const HttpResponsePtr &)
+#   - 네임스페이스: 들여쓰기 없음
+
+Language: Cpp
+Standard: c++20
+
+# ── 기본 스타일 ──────────────────────────────────────────────────────────────
+BasedOnStyle: LLVM
+
+# ── 들여쓰기 ─────────────────────────────────────────────────────────────────
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ContinuationIndentWidth: 8
+
+# 접근 지정자 들여쓰기 (public:/private:)
+AccessModifierOffset: -4
+
+# 네임스페이스 내부 들여쓰기 없음
+NamespaceIndentation: None
+
+# 전처리기 지시문 들여쓰기 없음
+IndentPPDirectives: None
+
+# ── 중괄호 스타일: Allman ────────────────────────────────────────────────────
+BreakBeforeBraces: Allman
+
+# 단일 줄 블록 허용 (짧은 람다 등)
+AllowShortBlocksOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortLambdasOnASingleLine: Inline
+
+# ── 라인 길이 ────────────────────────────────────────────────────────────────
+ColumnLimit: 120
+
+# ── 포인터/참조 정렬: 오른쪽 (& 타입명 오른쪽) ──────────────────────────────
+# 기존 코드: const HttpResponsePtr &, const string& 등 혼용
+# → Right 로 통일 (& 를 변수명 쪽으로)
+PointerAlignment: Right
+ReferenceAlignment: Right
+
+# ── 공백 ─────────────────────────────────────────────────────────────────────
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: true
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 2
+SpacesInAngles: Never
+SpacesInCStyleCastParentheses: false
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: true
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+
+# ── Include 정렬 ─────────────────────────────────────────────────────────────
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+IncludeCategories:
+  # 프로젝트 로컬 헤더
+  - Regex:    '^"'
+    Priority: 1
+  # Drogon 헤더
+  - Regex:    '^<drogon/'
+    Priority: 2
+  # jwt-cpp, bcrypt 헤더
+  - Regex:    '^<(jwt-cpp|bcrypt)/'
+    Priority: 3
+  # 시스템/표준 라이브러리
+  - Regex:    '^<'
+    Priority: 4
+
+# ── 기타 ─────────────────────────────────────────────────────────────────────
+# trailing comma 삽입 (C++11 이니셜라이저 리스트)
+InsertTrailingCommas: None
+
+# 빈 줄 최대 개수
+MaxEmptyLinesToKeep: 1
+EmptyLineBeforeAccessModifier: LogicalBlock
+
+# 람다 캡처 공백
+SpaceBeforeCpp11BracedList: false
+
+# auto 반환형 뒤 공백
+AlwaysBreakAfterReturnType: None
+AlwaysBreakAfterDefinitionReturnType: None
+
+# 생성자 초기화 리스트
+BreakConstructorInitializers: BeforeColon
+ConstructorInitializerIndentWidth: 4
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+
+# 템플릿 파라미터
+AlwaysBreakTemplateDeclarations: Yes
+
+# 함수 인자 줄 바꿈
+BinPackArguments: false
+BinPackParameters: false
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+
+# 연산자 줄 바꿈 위치
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeTernaryOperators: true
+
+# 주석 리플로우 비활성화 (기존 주석 변경 방지)
+ReflowComments: false
+
+# using namespace 경고 제거용 — 포맷터는 코드 변경 없이 스타일만 적용

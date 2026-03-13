@@ -53,3 +53,14 @@ endforeach()
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/models)
 target_sources(${PROJECT_NAME} PRIVATE ${SRC_DIR} ${CTL_SRC} ${FILTER_SRC} ${VIEWSRC} ${PLUGIN_SRC} ${MODEL_SRC} ${UTIL_SRC})
+
+##########
+# 단위 테스트 (Google Test)
+# cmake -DBUILD_TESTING=ON  -B build  → 테스트 활성화 (기본값)
+# cmake -DBUILD_TESTING=OFF -B build  → 테스트 비활성화
+option(BUILD_TESTING "단위 테스트 빌드 활성화" ON)
+if(BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+##########

@@ -1,0 +1,80 @@
+# .clang-tidy
+#
+# 기존 코드 스타일 기반 clang-tidy 설정
+# 대상: C++20, Drogon 프레임워크
+#
+# 적용 범주:
+#   modernize-*    : C++20 현대화 (override, nullptr, range-for 등)
+#   readability-*  : 가독성 (식별자 명명, 중복 코드 등)
+#   bugprone-*     : 잠재적 버그 (미초기화 변수, 정수 오버플로 등)
+#   performance-*  : 성능 (불필요한 복사, move 누락 등)
+#   cppcoreguidelines-* 일부 : 핵심 가이드라인
+#
+# 비활성화 규칙:
+#   -modernize-use-trailing-return-type : 기존 코드가 이미 trailing return 사용
+#   -readability-identifier-naming      : 기존 camelCase 혼용 허용
+#   -google-*                           : Google 스타일 강제하지 않음
+#   -fuchsia-*                          : Fuchsia 플랫폼 전용 규칙 제외
+
+Checks: >
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  readability-*,
+  -readability-identifier-naming,
+  -readability-magic-numbers,
+  bugprone-*,
+  performance-*,
+  cppcoreguidelines-avoid-goto,
+  cppcoreguidelines-init-variables,
+  cppcoreguidelines-no-malloc,
+  cppcoreguidelines-prefer-member-initializer,
+  cppcoreguidelines-pro-type-cstyle-cast,
+  -fuchsia-*,
+  -google-*,
+  -llvm-*,
+  -llvmlibc-*,
+  -altera-*,
+  -abseil-*,
+  -android-*,
+  -darwin-*,
+  -linuxkernel-*,
+  -zircon-*,
+  -objc-*
+
+# 경고를 에러로 승격하지 않음 (CI 에서는 별도 --warnings-as-errors 옵션 사용)
+WarningsAsErrors: ''
+
+# 헤더 필터: 프로젝트 소스만 분석 (external/ 제외)
+HeaderFilterRegex: '^(?!.*external/).*\.(h|hpp)$'
+
+# 분석 대상 파일 (external/ 와 build/ 제외)
+FormatStyle: file
+
+CheckOptions:
+  # modernize: nullptr 사용 권장
+  - key: modernize-use-nullptr.NullMacros
+    value: 'NULL'
+
+  # readability: 함수 길이 제한
+  - key: readability-function-size.LineThreshold
+    value: '80'
+  - key: readability-function-size.StatementThreshold
+    value: '50'
+  - key: readability-function-size.BranchThreshold
+    value: '10'
+  - key: readability-function-size.ParameterThreshold
+    value: '6'
+
+  # readability: using namespace 경고 (기존 코드 허용 — warning 만)
+  - key: readability-identifier-length.MinimumVariableNameLength
+    value: '2'
+  - key: readability-identifier-length.MinimumParameterNameLength
+    value: '2'
+
+  # bugprone: 정수 형 변환 경고
+  - key: bugprone-narrowing-conversions.WarnOnFloatingPointNarrowingConversion
+    value: 'true'
+
+  # performance: 불필요한 값 복사 경고
+  - key: performance-unnecessary-value-param.AllowedTypes
+    value: ''
