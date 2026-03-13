@@ -5,13 +5,19 @@
 
 echo "[pre-push] E2E 테스트 실행 중..."
 
-make e2e
-STATUS=$?
+# make 사용 가능하면 make e2e, 없으면 스크립트 직접 실행
+if command -v make > /dev/null 2>&1; then
+    make e2e
+    STATUS=$?
+else
+    bash tests/e2e/test_api.sh
+    STATUS=$?
+fi
 
 if [ $STATUS -ne 0 ]; then
     echo ""
     echo "[pre-push] E2E 테스트 실패 — 푸시가 차단되었습니다."
-    echo "           'make e2e' 를 직접 실행하여 오류를 확인하세요."
+    echo "           'make e2e' 또는 'bash tests/e2e/test_api.sh' 로 오류를 확인하세요."
     exit 1
 fi
 
